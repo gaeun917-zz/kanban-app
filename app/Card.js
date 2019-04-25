@@ -6,12 +6,16 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {DragSource, DropTarget} from 'react-dnd'
 
 // 1.DragSource
-// 1.1 spec, 1.2 collect(props for Cards)
+// 1.1 spec- begin(), end(), 1.2 collect(props for Cards)
 const DragSpec = {
     beginDrag(props) {
         return {
-            id: props.id
+            id: props.id,
+            status: props.status
         }
+    },
+    endDrag(props){
+        props.cardCallbacks.persistCardDrag(props.id, props.status);
     }
 }
 const DragCollect = (connect, monitor) => {

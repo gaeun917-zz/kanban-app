@@ -18,7 +18,7 @@ class KanbanBoardContainer extends Component {
             cards: [],
         };
         this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
-        this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
+        this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
     }
 
     // fetch data on componentDidMount
@@ -44,7 +44,7 @@ class KanbanBoardContainer extends Component {
 
 
     addTask(cardId, taskName) {
-       const {cards} = this.state;
+        const {cards} = this.state;
 
         // Rollback: in case of error, Keep a reference to the original state prior to
         let prevState = this.state;
@@ -130,19 +130,19 @@ class KanbanBoardContainer extends Component {
         let newDoneValue;
         // Using the $apply command, we will change the done value to its opposite
         let nextState = update(cards, {
-                [cardIndex]: {
-                    tasks: {
-                        [taskIndex]: {
-                            done: {
-                                $apply: (done) => {
-                                    newDoneValue = !done;
-                                    return newDoneValue;
-                                }
+            [cardIndex]: {
+                tasks: {
+                    [taskIndex]: {
+                        done: {
+                            $apply: (done) => {
+                                newDoneValue = !done;
+                                return newDoneValue;
                             }
                         }
                     }
                 }
-            });
+            }
+        });
         this.setState({
             cards: nextState
         });
@@ -205,6 +205,40 @@ class KanbanBoardContainer extends Component {
             }));
         }
     }
+    //used on Card
+    persistCardDrag(cardId, status) {
+        const {cards} = this.state;
+        // current card
+        let cardIndex = cards.findIndex((card) => card.id == cardId);
+        let card = cards[cardIndex];
+
+        fetch(`${API_URL}/cards/${cardId}`, {
+            method: 'put',
+            headers: API_HEADERS,
+            body: JSON.stringify({
+                status: card.status,
+                row_order_position: cardIndex
+            })
+        }).then((response) => {
+            if (!response.ok) {
+                // Throw an error if server response wasn't 'ok'
+                // so you can revert back the optimistic changes
+                throw new Error("Server response wasn't OK")
+            }
+        }).catch((error) => {
+            console.error("Fetch error:", error);
+            this.setState(
+                update(this.state, {
+                    cards: {
+                        [cardIndex]: {
+                            status: {$set: status}
+                        }
+                    }
+                })
+            );
+        });
+    }
+
 
     render() {
         return (
@@ -216,7 +250,8 @@ class KanbanBoardContainer extends Component {
                          }}
                          cardCallbacks={{
                              updateStatus: this.updateCardStatus,
-                             updatePosition: this.updateCardPosition
+                             updatePosition: this.updateCardPosition,
+                             persistCardDrag: this.persistCardDrag.bind(this)
                          }}
             />
         )
