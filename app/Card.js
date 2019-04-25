@@ -120,8 +120,8 @@ Card.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.object),
     taskCallbacks: PropTypes.object,
     cardCallbacks: PropTypes.object,
-    connectDragSource: PropTypes.object,
-    connectDropTarget: PropTypes.object
+    connectDragSource: PropTypes.func,
+    connectDropTarget: PropTypes.func
 };
 
 const dragHighOrderCard = DragSource('card', DragSpec, DragCollect)(Card);
