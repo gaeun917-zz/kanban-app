@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class CardForm extends Component {
+
     handleChange(field, e) {
         const {handleChange} = this.props;
         handleChange(field, e.target.value);
@@ -14,7 +15,11 @@ class CardForm extends Component {
     }
 
     render() {
-        const {handleSubmit, draftCard, buttonLabel} = this.props;
+        const {
+            handleSubmit,
+            draftCard,
+            buttonLabel
+        } = this.props;
 
         return (
             <div>
@@ -26,22 +31,20 @@ class CardForm extends Component {
                                required={true}
                                autoFocus={true}
                                onChange={this.handleChange.bind(this, 'title')}
-                        />
+                        /><br />
                         <textarea value={draftCard.description}
                                   placeholder="Description"
                                   required={true}
                                   onChange={this.handleChange.bind(this, 'description')}
-                        />
+                        /><br />
                         <label htmlFor="status">Status</label>
                         <select id="status"
                                 value={draftCard.status}
-                                onChange={this.handleChange.bind(this, 'status')}
-                        >
+                                onChange={this.handleChange.bind(this, 'status')}>
                             <option value="todo">To Do</option>
                             <option value="in-progress">In Progress</option>
                             <option value="done">Done</option>
-                        </select>
-                        <br/>
+                        </select><br />
                         <label htmlFor="color">Color</label>
                         <input id="color"
                                value={draftCard.color}
@@ -72,5 +75,6 @@ CardForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
-}
+};
+
 export default CardForm;

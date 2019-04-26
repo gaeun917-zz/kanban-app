@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import Card from './Card';
 import PropTypes from 'prop-types';
 import {DropTarget} from 'react-dnd'
-
+import Card from './Card';
 
 const targetSpec={
     hover(props, monitor){
         const draggedId = monitor.getItem().id;
-        props.cardCallbacks.updateStatus(draggedId,props.id)
+        props.cardCallbacks.updateStatus(draggedId, props.id)
     }
 }
 
@@ -17,15 +16,16 @@ const targetCollect =(connect, monitor)=>{
     }
 }
 
-
-
 // DnD: DragTarget
 class List extends Component {
     render() {
-        const {cards, title,
+        const {
+            cards,
+            title,
             taskCallbacks,
             cardCallbacks,
-            connectDropTarget} = this.props;
+            connectDropTarget
+        } = this.props;
 
         let cardList = cards.map((card) => {
             return <Card key={card.id}

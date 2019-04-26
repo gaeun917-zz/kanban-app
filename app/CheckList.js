@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class CheckList extends Component {
     checkInputKeyPress(evt) {
         const {cardId, taskCallbacks} = this.props;
-
         if (evt.key === 'Enter') {
             taskCallbacks.add(cardId, evt.target.value);
             evt.target.value = '';
@@ -12,10 +11,15 @@ class CheckList extends Component {
     }
 
     render() {
-        const {tasks, cardId, taskCallbacks} = this.props;
+        const {
+            tasks,
+            cardId,
+            taskCallbacks
+        } = this.props;
 
         let taskList = tasks.map((task, taskIndex) => (
-            <li key={task.id} className="checklist__task">
+            <li key={task.id}
+                className="checklist__task">
                 <input type="checkbox"
                        checked={task.done}
                        onChange={taskCallbacks.toggle.bind(null, cardId, task.id, taskIndex)}/>
